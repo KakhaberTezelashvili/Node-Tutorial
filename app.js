@@ -1,8 +1,16 @@
 const express = require("express");
 const app = express();
 
-app.use("/", (req, res, next) => {
-  console.log("this is our first route");
-});
+// setup logger
+const logger = require("./logger");
+app.use(logger);
 
-app.listen(3000);
+// configure pipeline
+app.use(express.static("public"));
+app.use(express.json());
+
+// import routes
+const userRoutes = require("./routes/user");
+app.use("/users", userRoutes);
+
+app.listen(3000, () => console.log("Server listening on port: 3000"));
